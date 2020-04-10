@@ -11,15 +11,20 @@ const DeviceList = () => {
         <h6>Devices</h6>
         <ul>
           {devices.map((device) => (
-            <li key={device.id}>
+            <li key={`${device.type}::${device.id}`}>
               <div className="card device">
                 <div className="device-image">
                   <img src={keyboard} alt="MIDI Keyboard" />
                 </div>
                 <div className="device-details">
-                  <div className="device-make">{device.make}</div>
-                  <div className="device-model">{device.model}</div>
-                  <div className="device-description">{device.description}</div>
+                  <div className="device-type">{device.type}</div>
+                  <div className="device-name">{device.name}</div>
+                  <div className="device-manufacturer">
+                    {device.manufacturer}
+                  </div>
+                  <div className="device-connection">{device.connection}</div>
+                  <div className="device-id">{device.id}</div>
+                  <div className="device-state">{device.state}</div>
                   <div
                     onClick={() => deleteDevice(device.id)}
                     className="device-delete"
