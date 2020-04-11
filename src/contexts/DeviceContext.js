@@ -1,24 +1,16 @@
 import React, { createContext, useEffect, useState } from "react";
 import WebMidi from "webmidi";
-// import uniqid from "uniqid";
 
 export const DeviceContext = createContext(null);
 
 const DeviceContextProvider = ({ children }) => {
-  const [devices, setDevices] = useState([]);
-
-  const addDevice = (device) => {
-    console.log("addDevice", { devices, device });
-    setDevices([...devices, device]);
-    console.log({ devices });
-  };
-
-  const deleteDevice = (id) => {
-    setDevices(devices.filter((device) => device.id !== id));
-  };
+  const [devices, setDevices] = useState({
+    inputs: [],
+    outputs: [],
+  });
 
   useEffect(() => {
-    console.log("useEffect", { devices });
+    console.log("useEffect");
     WebMidi.enable((err) => {
       if (err) {
         console.log("WebMidi could not be enabled");
@@ -27,17 +19,17 @@ const DeviceContextProvider = ({ children }) => {
         console.log("WebMidi enabled!");
         const { inputs, outputs } = WebMidi;
         console.log({ inputs, outputs });
-        for (const device of [...inputs, ...outputs]) {
-          // addDevice(device);
-          setDevices([...devices, device]);
-          console.log({ devices });
-        }
+
+        setDevices({
+          inputs,
+          outputs,
+        });
       }
     });
-  }, [devices]); // <- this empty array means this effect will only run once
+  }, []); // <- this empty array means this effect will only run once
 
   return (
-    <DeviceContext.Provider value={{ devices, addDevice, deleteDevice }}>
+    <DeviceContext.Provider value={{ devices }}>
       {children}
     </DeviceContext.Provider>
   );
